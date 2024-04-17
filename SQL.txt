@@ -1,0 +1,1135 @@
+SQL
+S --> STRUCTURED
+Q --> QUERY
+L -> LANGUAGE
+
+SQL IS USED TO CREATE, RETRIVE, UPDATE, AND DELECT DATA FROM A DATABASE.
+TO WRITE SQL STATEMENTS, WE WILL NEED A SOFTWARE, KNOWN AS THE DATABASE MANAGEMENT SYSTEM(DBMS),
+IT'S A WORKSPACE TO WRITE OUR SQL STATEMENTS, AND GENERALLY JUST WORK WITH OUR DATABADE.
+
+
+
+<<<||| WORKING WITH DATABASE, TABLES, AND COLUMN USING SQL |||>>>
+
+/// TO CREATE A DATABASE USING SQL \\\
+[ CREATE DATABASE dataBaseName; ]
+
+/// TO DELECT A DATABASE USING SQL \\\
+[ DROP DATABASE dataBaseName ]
+
+/// TO USE(SELECT) A DATABASE USING SQL \\\
+[ USE dataBaseName ]
+
+/// TO MAKE DATABASE READ-ONLY USING SQL \\\
+[ ALTER DATABASE dataBaseName READ ONLY = 1; ]
+
+/// TO DISABLE READ-ONLY MODE USING SQL \\\
+[ ALTER DATABASE dataBaseName READ ONLY = 0; ]
+
+/// TO CREATE A TABLE USING SQL \\\
+[
+    CREATE TABLE tablenam (
+        colNam INT,
+        fn VARCHAR(50),
+        ln VARCHAR(50),
+        pay DECIMAL(5, 2),
+        entry datetime
+    );
+]
+
+/// SELECT OR DISPLAY ALL DATA FROM TABLE USING SQL \\\
+[ SELECT * FROM tablenam; ]
+
+/// RENAME TABLE USING SQL \\\
+[ RENAME TABLE tablenam TO tablenam101; ]
+
+/// DELECT TABLE USING SQL \\\
+[ DROP TABLE tablenam101; ]
+
+/// ADD COLUMN TO TABLE USING SQL \\\
+[
+    ALTER TABLE tablenam101
+    ADD phone_number VARCHAR(15);
+]
+
+/// RENAME COLUMN IN TABLE USING SQL \\\
+[
+    ALTER TABLE tablenam101
+    RENAME COLUMN phone_number TO email;
+]
+
+/// MODIFY COLUMN DATA-TYPE \\\
+[
+    ALTER TABLE tablenam101
+    MODIFY COLUMN phone_number(10);
+]
+
+/// TO CHANGE THE POSITION OF COLUMN USING SQL \\\
+[
+    ALTER TABLE tablenam101
+    MODIFY phone_number VARCHAR(15)
+    AFTER ln;
+]
+/// IF YOU NEED IT TO BE FIRST \\\
+[
+    ALTER TABLE tablenam101
+    MODIFY phone_number VARCHAR(15)
+    FIRST;
+]
+
+/// TO DELECT COLUMN USING SQL \\\
+[
+    ALTER TABLE tablenam101
+    DROP COLUMN phone_number;
+]
+
+
+
+<<<||| WORKING WITH ROWS USING SQL |||>>>
+
+/// TO INSERT DATA(ROW) INTO TABLE USING SQL \\\
+[
+    INSERT INTO tablenam101
+    VALUES(
+        1, 
+        "Eugene", 
+        "Krabs", 
+        25.20, 
+        "2024-02-01 20:34:20"
+    );
+]
+/// TO INSERT MULTIPLY DATA(ROW) INTO TABLE USING SQL \\\
+[
+    INSERT INTO tablenam101
+    VALUES  (),
+            (),
+            (),
+            ();
+]
+
+/// TO INSERT DATA(ROW) INTO SPECIFICS COLUMNS IN THE TABLE USING SQL \\\
+[
+    INSERT INTO tablenam101 (fn, ln, pay)
+    VALUES(
+        "Eugene", 
+        "Krabs", 
+        25.20
+    );
+]
+
+/// DISPLAY SPECIFICS DATA YOU WANT TO SEE, THE ORDER DOES NOT MATTER \\\
+[ SELECT ln, fn FROM `tablenam101`;]
+
+/// DISPLAY DATA FROM A SPECIFICS ROW USING SQL \\\
+[ SELECT * FROM `tablenam101` WHERE rowNam = 2; ]
+[ SELECT * FROM `tablenam101` WHERE pay >= 15; ]
+[ SELECT * FROM `tablenam101` WHERE entry <= "2023-01-03"; ]
+[ SELECT * FROM `tablenam101` WHERE rowNam != 1; ]
+// THIS CHECKS IF THE entry was not filled.
+[ SELECT * FROM `tablenam101` WHERE entry IS NULL; ]
+// THIS CHECKS IF THE entry has been filled.
+[ SELECT * FROM `tablenam101` WHERE entry IS NOT NULL; ]
+
+
+
+<<<||| UPDATE AND DELECT DATA FROM TABLE USING SQL |||>>>
+
+// UPDATE TABLE USING SQL \\
+[ UPDATE `tablenam101` SET pay = 10.25 WHERE rowNam = 3; ]
+// MULTIPLY UPDATES TO TABLE USING SQL \\
+[
+    UPDATE `tablenam101`
+    SET pay = 11.25, 
+        entry = "2024-03-31 16:38:78",
+        ln = "Shampi"
+    WHERE rowNam = 3;
+]
+// UPDATE THE ENTIRE COLUMN WITH ONE VALUE \\
+[ 
+    UPDATE `tablenam101` 
+    SET entry = "2024-04-14 00:34:23";
+]
+
+!!!! MUST EXCUTE(DO) THIS QUERY !!!!
+// TO UNDO SOMETHING IN THE TABLE, WE NEED TO SET THE AUTOCOMMIT(AUTO-SAVE) TO OF WITH SQL \\
+[ SET AUTOCOMMIT = OFF; ]  BY DEFAULT, IT'S ON, THIS WILL ENABLE GET BACK DATA YOU LOST AFTER THE SETTING THE: 'SET AUTOCOMMIT = OFF' QUERY.
+SINCE WE HAVE DISABLED THE AUTO-SAVE, YOU WILL NEED TO SAVE EVERY IMPORTANT QUERY MANUALLY BEFORE EXCUTING IT.
+SAVE EVERY QUERY WITH THIS CODE: [  COMMIT; ] 
+// THIS WILL GET(RESTORE) DATA BACK TO IT'S PREVIOUS POINT IN SQL \\
+[ ROLLBACK; ]
+
+// DELECT THE ENTIRE ROWS WITH ONE VALUE \\
+[ 
+    DELECT FROM  `tablenam101`
+]
+
+// DELECT SPECIFICS ROWS WITH ONE VALUE \\
+[ 
+   DELETE FROM `tablenam101` WHERE rowNam = 1;
+]
+
+
+
+<<<||| GETTING CURRENT DATE AND TIME USING SQL |||>>>
+[
+    INSERT INTO test VALUE ( 
+        # THESE ARE IN-BUILT FUNCTIONS 
+        #GET CURRENT DATE 
+        CURRENT_DATE(), 
+        
+        #GET CURRENT TIME 
+        CURRENT_TIME(), 
+        
+        #GET CURRENT DATE AND TIME 
+        NOW() 
+    );
+]
+
+// YOU CAN ALSO SET THE DATE, TIME OR DATE_TIME TO THE NEXT-DAY FROM THE CURRENT, SEE EXAMPLE BELOW \\
+[ 
+    INSERT INTO test VALUE ( 
+        # IF TODAY IS MONDAY, THE DATE WILL APPAER AS TUESDAY.
+        # YOU CAN DO BACKWARD TOO WITH THE '- 1'
+        CURRENT_DATE() + 1, 
+    );
+]
+
+
+
+<<<||| THE UNIQUE(EVERY SHOULD BE DIFFERENT) CONSTRAINT USING SQL |||>>>
+[
+    CREATE TABLE products (
+        p_id INT,
+        
+        # TO ENABLE UNIQE
+        p_name VARCHAR(25) UNIQUE,
+        
+        # DECIMAL(4, 2) MAXIMUN OF 4 DIGITS AND A PRESESSION OF 2 DECIMAL PLACES
+        price DECIMAL(4, 2)
+    );
+]
+// INCASE YOU FORGOT TO ADD THE 'UNIQUE' TO THE TABLE COLUMN, DO THIS TO ADD IT \\
+[
+    ALTER TABLE products
+    ADD CONSTRAINT 
+    # 'p_id' IS THE COLUMN NAME
+    UNIQUE (p_id);
+]
+
+
+
+<<<||| THE NOT NULL CONSTRAINT USING SQL |||>>>
+// TO ADD 'NOT NULL' TO A NEW TABLE \\
+
+CAN BGE ADDED TO A COLUMN, WHEN YOU CREATE A TABLE, 
+WHEN WE ENTER A NEW ROW, THE VALUE WITHIN THAT COLUMN, CAN NOT BE NULL.
+ANY COLUMN YOU DO NOT WHAT TO HAVE NO VALUES JUST ADD [NOT NULL]
+[
+    CREATE TABLE products (
+        # TO ENABLE UNIQE
+        p_name VARCHAR(25) NOT NULL,
+        price DECIMAL(4, 2)
+    );
+]
+
+IT'S A USEFUL CONSTRAINT TO VALIDATE INPUT, AND MAKE SURE A COLUME ALSO HAS DATA.
+
+/// TO ADD 'NOT NULL' TO AN EXISTING TABLE \\
+[
+    ALERT TABLE products
+    MODIFY price DECIMAL(4, 2) NOT NULL;
+]
+
+
+
+<<<||| THE CHECK CONSTRAINT USING SQL |||>>>
+USED TO LIMIT WHAT VALUES CAN BE PLACED IN A COLUMN.
+THE CHECK CONSTRAINT SHOULD BE ADDED AT THE END OF THE TABLE,
+AND SHOULD BE GIVEN A VARIABLE NAME, WHICH THAT CHECK STATEMENT WILL BE REFERED TO. SEE EXAMPLE BELOW
+[
+    ! WAS NOT WORKING WITH MySQL !
+    CREATE TABLE employees (
+        employee_id INT,
+        fn VARCHAR(50),
+        ln VARCHAR(50),
+        hourly_pay DECIMAL(5, 2),
+        hire_date date(),
+        
+        # [chk_hourly_pay] IS THE CHECK CONSTRAINT VARIABLE.
+        # AND [CHECK (hourly_pay >= 10.00)] IS DOING THE CHECK OR VALIDATION.
+        CONSTRAINT chk_hourly_pay CHECK (hourly_pay >= 10.00)
+    );
+]
+
+/// TO ADD 'CHECK CONSTRAINT' TO AN EXISTING TABLE \\
+[
+    ! WAS NOT WORKING WITH MySQL !
+    ALTER TABLE products
+    ADD CONSTRAINT chk_hourly_pay CHECK (chk_hourly_pay >= 10.00);
+]
+
+/// TO DELECT A CHECK CONSTRAINT USING SQL \\
+[
+    ! I DID'NT TRY IT WITH MySQL !
+    ALTER TABLE products
+    DROP CHECK chk_hourly_pay;
+]
+
+
+
+<<<||| THE DEFAULT CONSTRAINT USING SQL |||>>>
+WHEN INSERTING A NEW ROW, IF WE DO NOT SPECIFIC A VALUE FOR A COLUME, BY DEFAULT
+WE CAN ADD SOME VALUE THAT WE SET.
+THIS IS LIKE A DEFAULT VALUE, WHICH WE HAVE TO SET TO THE WANT WE WHAT, 
+SO WE WILL NOT WRITE THE VALUE, WE WILL JUST WRITE DEFAULT AND THE VALUE WILL BE THERE.
+EXAMPLE BELOW
+[
+    CREATE TABLE products (
+        p_id INT,
+        p_name VARCHAR(25),
+        
+        # THIS IS HOW TO SET THE DEFAULT VALUE = "DEFAULT value"
+        price DECIMAL(4, 2) DEFAULT 0.00
+    );
+]
+
+/// TO ADD 'DEFAULT CONSTRAINT' TO AN EXISTING TABLE \\
+[
+    ! IT'S WORKING WITH MySQL !
+    ALTER TABLE products
+    ALTER price SET DEFAULT 0.00;
+]
+
+/// LET'S TRY INSERTING NEW ROW TO THE EXISTING TABLE \\
+[
+    !!! IT'S WORKING WITH MySQL !!!
+    [
+        INSERT INTO products (p_id, p_name, price)
+        VALUES  (5, "stwar", DEFAULT),
+                (6, "plate-spoon", DEFAULT),
+                (7, "fork", DEFAULT),
+                (8, "napkin", DEFAULT);
+    ]
+
+    !!! WAS NOT WORKING WITH MySQL !!!
+    [
+        INSERT INTO products (p_id, p_name, price)
+        VALUES  (5, "stwar"),
+                (6, "plate-spoon"),
+                (7, "fork"),
+                (8, "napkin");
+    ]
+]
+
+
+
+<<<||| THE PRIMARY KEY CONSTRAINT USING SQL |||>>>
+
+THE PRIMARY KEY CONSTRAINT CAN BE APPLIED TO A COLUMN, WERE EACH VALUE MUST BE UNIQUE AND NOT NULL.
+IT'S TIPICALLY USED AS A UNIQUE IDENTIFIER, 
+EVERY TABLE CAN HAVE ONLY ONE PRIMARY KEY.
+
+/// CREATE TABLE WITH PRIMARY KEY \\
+[
+    !!! IT'S WORKING WITH MySQL !!!
+    CREATE TABLE transactions (
+        t_id INT PRIMARY KEY,
+        amont DECIMAL(5, 2)
+    );
+]
+
+/// TO ADD 'PRIMARY KEY CONSTRAINT' TO AN EXISTING TABLE \\
+[
+    !!! NOT WORKING WITH MySQL !!!
+    ALTER TABLE transactions
+    ADD CONSTRAINT
+    PRIMARY KEY(t_id);
+]
+
+
+
+<<<||| THE AUTO-INCREAMENT ATTRIBUTE KEY CONSTRAINT USING SQL |||>>>
+
+THE AUTO-INCREMENT ATTRIBUTE CAN BE APPLIED TO A COLUMN THAT IS SET AS A KEY.
+WHEN WE INSERT A NEW ROW, OUR PRIMARY KEY WILL BE INCREASED AUTOMATICALLY.
+
+/// CREATE TABLE WITH PRIMARY KEY \\
+[
+    !!! IT'S WORKING WITH MySQL !!!
+    CREATE TABLE transactions (
+        t_id INT PRIMARY KEY AUTO_INCREMENT,
+        amount DECIMAL(5, 2)
+    );
+]
+
+/// TO CHANGE THE NUMBER(VALUE) OF HOW THE AUTO-INCREAMENT WILL START FROM TO AN EXISTING TABLE \\
+[
+    ALTER TABLE transactions
+
+    # THE AUTO_INCREMENT WILL START FROM '10' GOING
+    AUTO_INCREMENT = 10;
+]
+
+
+
+<<<||| THE FOREIGN KEY CONSTRAINT USING SQL |||>>>
+THINK OF IT AS A PRIMARY KEY FROM ONE TABLE, WHICH CAN BE FOUND IN A DIFFERENT TABLE.
+USING A FOREIGN KEY, WE CAN ESTABLISH A LINK BETWEEN TWO TABLES.
+
+THERE ARE TWO PRIMARY BENEFITS TO THIS: 1.  WE CAN USE IT TO ACCESS DATA OF ONE PERSON FROM THE OTHER TABLE, USING THE KEY(id). 
+                                        2.
+
+// TO ADD A FOREIGN KEY TO A NEW TABLE USING SQL \\
+THE OTHER TABLE'S NAME IS 'customers' AND WE WANT THE COLUMN 'customer_id' AS THE FOREIGN KEY.
+[
+    CREATE TABLE transactions (
+        transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+        amount DECIMAL(5, 2),
+
+        # THIS WILL GET(REFRELET) DATA FROM THE 'customers(customer_id)' TABLE.
+        tran_customer_id INT,
+
+        # HERE IS WERE WE ATTACH THE FOREIGN FROM THE OTHER TABLE NAME: 'customers'
+        FOREIGN KEY(tran_customer_id) REFERENCES customers(customer_id)
+    );
+]
+
+// DELECT FOREIGN KEY USING SQL \\
+TO DELECT FOREIGN KEY FROM THE TABLE THAT HAS BEEN AFFECTED. 
+[
+    ALERT TABLE affected_TABLE_name
+    DROP FOREIGN KEY find_unique_name&write;
+]
+
+// TO APPLY A FOREIGN KEY TO A TABLE THAT ALREADY EXIST USING SQL \\
+[
+    ATER TABLE table_to_receive_foreignKey
+    ADD CONSTRAINT name_u_will_refer
+    FOREIGN KEY(customer_id) REFERENCES customers(customer_id);
+]
+
+
+
+<<<||| THE JOINS IN SQL |||>>>
+JOIN IS A CLUSE THAT IS USED TO COMBINE ROWS FROM TWO OR MORE TABLES, 
+BASED ON THE RELATED COLUMNS BETWEEN THEM, SUCH AS A FOREIGN KEY.
+
+--- INNER JOINS ---
+transactions & customers
+    LEFT         RIGHT
+// CREATE INNER JOIN USING SQL \\
+[
+    SELECT * FROM transactions INNER JOIN customers
+    # WE'RE GOING TO JOIN THESE TWO TABLES BY THE FOREIGN KEY FROM 'transactions'
+    ON transactions.customer_id = customers.customer_id;
+]
+!!!
+THE QUERY ABOVE IS TELLING MySQL TO SELECT ALL ROWS,
+FROM THESE TWO TABLES, THAT HAVE MATCHING customer_id. 
+
+!! IF ANY ROW DOSE NOT HAVE MATCHING customer_id IT WILL NOT SHOW !!
+!!!
+
+YOU CAN ALSO DO RIGHT JOIN OR LEFT JOIN TOO SEE EXAMPLE BELOW.
+
+// INNER JOIN - EASY WAY TO FIND WHO DID A TRANSACTION \\
+[
+    SELECT transaction_id, amount, f_name, l_name
+    FROM transactions INNER JOIN customers
+    # WE'RE GOING TO JOIN THESE TWO TABLES BY THE FOREIGN KEY FROM 'transactions'
+    ON transactions.customer_id = customers.customer_id;
+]
+
+// LEFT JOIN - DISPLAY EVERYTHING FROM THE LEFT(transactions) \\
+IF THERE ARE MATCHES IT WILL PULL THEM ALONG TO DISPLAY
+[
+    SELECT * FROM transactions LEFT JOIN customers
+    # WE'RE GOING TO JOIN THESE TWO TABLES BY THE FOREIGN KEY FROM 'transactions'
+    ON transactions.customer_id = customers.customer_id;
+]
+
+// RIGHT JOIN - DISPLAY EVERYTHING FROM THE RIGHT(customers) \\
+IF THERE ARE MATCHES IT WILL PULL THEM ALONG TO DISPLAY
+[
+    SELECT * FROM transactions  RIGHT JOIN customers
+    # WE'RE GOING TO JOIN THESE TWO TABLES BY THE FOREIGN KEY FROM 'transactions'
+    ON transactions.customer_id = customers.customer_id; 
+]
+
+
+
+<<<||| FUNCTIONS IN SQL |||>>>
+A FUNCTION IS STORED PROGRAM THAT YOU CAN PASS PARAMETERS INTO TO RETURN A VALUE.
+
+// THE COUNT FUNCTION \\
+THIS WILL COUNT THE NUMBER OF ROWS
+[
+    SELECT COUNT(amount)
+    FROM transactions;
+
+    OR
+
+    # "Today's Transaction" WILL BE THE TITLE, YOU NAME IT HOW YOU LIKE IT.
+    SELECT COUNT(amount) AS "Today's Transaction"
+    FROM transactions;
+]
+
+// THE MAX FUNCTION \\
+THE WILL DISPLAY THE BIGGEST VALUE
+[
+    # 'maximum' WILL BE THE TITLE
+    SELECT MAX(amount) AS maximum
+    FROM transactions;
+]
+
+// THE MIN FUNCTION \\
+THE WILL DISPLAY THE SMALLEST VALUE
+[
+    SELECT MIN(amount) AS minimum
+    FROM transactions;
+]
+
+// THE AVG FUNCTION \\
+THE WILL DISPLAY THE AVERAGE VALUE
+[
+    SELECT AVG(amount) AS average
+    FROM transactions;
+]
+
+// THE SUM FUNCTION \\
+THE WILL DISPLAY THE TOTAL OF ALL OUR TRANSACTIONS.
+[
+    SELECT SUM(amount) AS sum
+    FROM transactions;
+]
+
+// THE CONCAT FUNCTION \\
+THE WILL DISPLAY THE FIRST AND LAST NAME OF OUR CUSTOMERS.
+[
+    SELECT CONCAT(f_name, " ", l_name) AS fullname
+    FROM customers;
+]
+
+
+
+<<<||| LOGICAL OPERATORS IN SQL |||>>>
+THEY ARE KEY WORDS THAT ARE USED TO COMBINE MORE THAN ONE CONDITIONS.
+
+// THE 'AND' LOGICAL OPERATOR \\
+[
+    SELECT * FROM employees
+    WHERE entry < "2025-01-5" AND job = "manager";
+]
+
+// THE 'OR' LOGICAL OPERATOR \\
+[
+    SELECT * FROM employees
+    WHERE entry < "2025-01-5" AND job = "manager";
+]
+
+// THE 'NOT' LOGICAL OPERATOR \\
+THIS BASICLLY REVERSES ANYTHINH YOU SAY
+[
+    SELECT * FROM employees
+    WHERE NOT job = "manager";
+]
+
+// COMBINE OPERATORS \\
+[
+    SELECT * FROM employees
+    WHERE NOT job = "manager" AND NOT job = "asst. manager";
+]
+
+// THE 'BETWEEN' OPERATOR \\
+THE BETWEEN OPERATOR IS USED WITHIN A SINGLE COLUMN
+[
+    SELECT * FROM employees
+    WHERE entry BETWEEN "2024-04-14" AND "2024-04-17";
+    # IT WILL SHOW THE "2024-04-14" BUT WILL NOT SHOW THE "2024-04-17".
+]
+
+// THE 'IN' OPERATOR \\
+THINK OF THIS AS THE WITHIN
+[
+    SELECT * FROM employees
+    WHERE job IN ("cook", "asst. manager");
+]
+
+
+
+<<<||| THE WILD CARD CHARACTERS IN SQL |||>>>
+THEY ARE TWO = '%' AND '_'.
+EACH OF THESE IS USED TO SUBTITUTE ONE OR MORE CHARACTERS IN A STRING.
+
+// '%' REPRESENTS ANY NUMBER OF RANDOM CHARACTERS \\
+
+THIS WILL DISPLAY ANY FIRST NAME WHICH STARTS WITH 'S'
+[
+    SELECT * FROM employees
+    WHERE fn LIKE "s%";
+]
+
+THIS WILL DISPLAY ANY LAST NAME WHICH ENDS WITH 'R'
+[
+    SELECT * FROM employees
+    WHERE ln LIKE "%r";
+]
+
+THIS WILL DISPLAY ANY ENTRY DATE WHICH WITH '2024' AND END WITH THE NUMBER '3'.
+[
+    SELECT * FROM employees
+    WHERE entry LIKE "2024%3";
+]
+
+// '_' REPRESENTS ONE RANDOM LETTER \\
+
+THIS WILL DISPLAY THE cook job
+[
+    SELECT * FROM employees
+    WHERE job LIKE "_ook";
+]
+[
+    SELECT * FROM employees
+    WHERE job LIKE "_oo_";
+]
+
+FIND PEOPLE WHO WE HIRED IN APRIL
+[
+    SELECT * FROM employees
+    WHERE entry LIKE "____-04-__";
+]
+
+COMBINE TWO WILD CHARACTERS - DISPLAY job WHO'S SECOND LETTER IS AN 'a'.
+[
+    SELECT * FROM employees
+    WHERE job LIKE "_a%";
+]
+
+
+
+<<<||| THE 'ORDER BY CLAUSE' IN SQL |||>>>
+BY DEFAULT IT WORKS ALPHBETICALLY(A-Z, 0-...),
+IN SIMPLE TERMS 'ASC' ASCENDING THATS THE DEFAULT
+
+TO REVERSES IT USING SQL, JUST ADD 'DESC' short for descending order. EXAMPLE BELOW.
+[
+    SELECT * FROM employees
+    ORDER BY ln DESC;
+]
+
+ODER THE TABLE BY employee_id(rowNam)
+[
+    SELECT * FROM employees 
+    ORDER BY rowNam;
+]
+
+YOU CAN ORDER BY MORE THAN ON COLUMN
+ASUMING WE HAVE SAME NUMBERS IN THE 'amount' COLUMN, 
+WE CAN USE THE 'customer_id' IN ADDION TO ORDER THE TABLE WELL.
+[
+    SELECT * FROM transactions
+    ORDER BY amount, customer_id;
+]
+
+
+
+<<<||| THE 'LIMIT CLAUSE' IN SQL |||>>>
+IT'S USED TO LIMIT THE NUMBER OF RECORDS, THAT ARE QUERYED.
+USEFUL IF YOU'RE WORKING WITH A LOT OF DATA,
+CAN BE USED TO DISPLAY A LARGE DATA ON PAGES (pagination).
+
+THIS WILL DISPLAY, ONLY THE FIRST 3 DATA
+[
+    SELECT * FROM customers
+    LIMIT 3;
+]
+
+CAN BE COMBINED WITH THE 'ORDER BY' CLAUSE
+[
+    SELECT * FROM customers
+    ORDER BY l_name LIMIT 2;
+] 
+
+YOU CAN ALSO USE AN OFF-SET (3, 2 WHICH MEANS AFTER DISPLAYING THE FIRST '3' DATA ADD '2' MORE. EXAMPLE BELOW.)
+--
+LET'S WE HAVE 50 customers,
+'LIMIT 1, 1;' MEANS DISPLAY THE DATA WHICH COMES AFTER '1', '1' IS THE customer_id,
+WHICH SHOULD DISPLAY 9 customers, BUT SHOW ONLY ONE THAT IS WHAT '1;' SAYS.
+SO ONE DATA WILL BE DISPLAYED, WHICH SHOULD HAVE THE customer_id of '2'.
+--
+[
+    SELECT * FROM customers
+    LIMIT 1, 1;
+]
+
+--
+'LIMIT 20, 10;' MEANS DISPLAY 10 DATA AFTER THE customer_id OF '20',
+SO 10 DATA WILL BE DISPLAYED, WHICH SHOULD HAVE THE customer_id FROM 21 TO 30.
+--
+[
+    SELECT * FROM customers
+    LIMIT 20, 10;
+]
+
+
+
+<<<||| THE 'UNION OPERATOR' IN SQL |||>>>
+THE UNION OPERATOR COMBINES THE RESULTS OF TWO OR MORE 'SELECT STATEMENTS'.
+IF YOU'RE COMBINING TWO SELECT STATEMENTS WITH DIFFERENT NUMBER OF COLUMNS, 
+A UNION WILL NOT WORK. 
+TO SLOVE THIS, WE CAN SELECT THE SPECIFIC COLUMNS WE NEED, AND IT WILL WORK. 
+!! BUT REMEMBER STILL BOTH COLUMNS NEED TO HAVE THE SAME NUMBER OF COLUMNS !!
+
+LIKE THIS
+[
+    SELECT fn, ln FROM employees
+    UNION
+    SELECT f_name, l_name FROM customers;
+]
+
+INCASE THERE ARE DUPLICATE IN BOTH TABLES, 
+IF YOU WANT TO DISPLAY THEM, THEN YOU MUST USE 'UNION ALL', SINCE 'UNION' ALONE DOS'NT ALLOW DUPLICATE.
+EXAMPLE BELOW
+[
+    SELECT fn, ln FROM employees
+    UNION ALL
+    SELECT f_name, l_name FROM customers;
+]
+
+
+
+<<<||| THE 'SELF JOIN' IN SQL |||>>>
+JOIN TOGETHER ANOTHER COPY OF A TABLE TO IT-SELF.
+THEY'RE USE TO COMPARE ROWS OF THE SAME TABLE
+THEY HELP TO DISPLAY A HEIRARCHY OF DATA.
+
+EXAMPLE 1
+THIS IS A REFERRAL EXAMPLE
+[
+    SELECT 	origin_Table.customer_id, 
+            origin_Table.f_name,
+            origin_Table.l_name,
+            CONCAT(referral_Table.f_name, " ", referral_Table.l_name) AS "refered by"
+    FROM customers AS origin_Table
+    LEFT JOIN customers AS referral_Table
+    ON origin_Table.referral_id = referral_Table.customer_id
+]
+
+EXAMPLE 2
+THIS IS A SUPERVISOR EXAMPLE
+[
+    SELECT  orgnal_tbl.fn,
+            orgnal_tbl.ln,
+            CONCAT(copy_tbl.fn, " ", copy_tbl.ln) AS "report to"
+    FROM employees AS orgnal_tbl
+    LEFT JOIN employees AS copy_tbl
+    ON orgnal_tbl.supervisor_id = copy_tbl.rowNam;
+]
+
+
+
+<<<||| 'VIEWS' IN SQL |||>>>
+VIEWS ARE VIRTUAL TABLES THEY ARE NOT REAL, 
+THEY ARE MADE UP OF FIELDS AND COLUMNS FORM ONE OR MORE REAL TABLES,
+AND THEY CAN BE INTERACTED WITH AS IF THEY WERE REAL TABLE.
+
+- EXAMPLE - 
+BOSS WANTS AN ATTENDENCE SHEET MADE UP OF JUST THE FIRST AND LAST NAME OF ALL employees,
+INSTAND OF CREATING ANOTHER TABLE, WE WILL CREATE A VIEW USING THE FIRST AND LAST NAMES OF OUR EXISTING employees TABLE, SO WE DO NOT REPEAT DATA,
+
+// TO CREATE A VIEW USING SQL \\
+[
+    CREATE VIEW employee_attendance AS
+    SELECT fn, ln
+    FROM employees;
+
+    SELECT * FROM employee_attendance;
+]
+
+// TO DELECT A VIEW USING SQL \\
+[
+    DROP VIEW employee_attendance;
+]
+
+// VIEW IS ALSO up-to-date \\
+IT WILL UPDATE AUTOMATICALLY, WHEN YOU MAKE CHANGES IN THE REAL TABLE.
+
+
+
+<<<||| 'INDEX' IN SQL |||>>>
+INDEX IS A BTree DATA STRUCTURE, 
+THEY ARE USED TO FIND VALUES WITHIN A SPECIFIC COLUMN MORE QUICKLY,
+MySQL NORMALLY PER4FORMS SEARCHES SEQUENTIALLY THROUGH A COLUMN,
+UPDATE TAKES MORE TIME, SELECT TAKES LESS TIME.
+
+// TO SHOW THE CURRENT INDEXES OF A TABLE USING SQL \\
+[
+    SHOW INDEXES FROM customers;
+]
+
+LET'S ADD AN INDEX TO THE FIRST AND LAST NAME OF OUR CUSTOMERS, 
+SO WE CAN FIND THEM FASTER.
+// TO CREATE AN INDEX \\
+[
+    CREATE INDEX last_name_idx
+    ON customers(l_name);
+] 
+
+LET'S FIND A CUSTOMER USING HIS LAST NAME, 
+THE PROCESS WILL BE FASTER WILL LARGE DATA.
+THE DIFFERENT CAN NOT BE SEEN(with small data) UNLESS YOU HAVE LARGE DATA.
+[
+    SELECT * FROM customers
+    WHERE l_name = "Moses";
+]
+
+// MULTI-COLUMN INDEX \\
+ONE INDEX FOR TWO OR MORE COLUMNS
+!! REMEMBER TO LIST THE COLUMNS IN ORDER !!
+[
+    CREATE INDEX lst_frt_nam_idx
+    ON customers(l_name, f_name);
+] 
+
+// TO DELECT AN INDEX USING SQL \\
+[
+    ALTER TABLE customers
+    DROP INDEX last_name_idx;
+]
+
+
+
+<<<||| 'SUBQUERY' IN SQL |||>>>
+IS JUST A QUERY, WITHIN ANOTHER QUERY. 
+query(subquery).
+
+THE VALUE PRODUCED FROM THE 'subquery', CAN BE USED IN THE MAIN 'query'
+
+-- EXAMPLE 1 --
+LET'S COMPARE THE PAY OF EVERY WORKER, TO THE AVERAGE PAY EVERY WORKER SHOULD GET.
+[
+    # (SELECT AVG(pay) FROM employees) ~ THIS IS BETTER THAN WRITING THE RAW FIGURE, SINCE THE FIGURE WILL SURELY CHANGE
+    SELECT fn, ln, pay, (SELECT AVG(pay) FROM employees) AS avg_pay
+    FROM employees;
+]
+
+-- EXAMPLE 2 --
+LET'S FIND EVERY WORKER, THAT HAS A PAY GREATER THAN THE AVERAGE PAY.
+[
+    SELECT fn, ln, pay  
+    FROM employees
+    WHERE pay > (SELECT AVG(pay) FROM employees);
+]
+
+-- EXAMPLE 3 --
+LET'S FIND THE FIRST AND LAST NAME OF EVERY CUSTOMER, THAT HAS EVERY MADE A TRANSACTION.
+[
+    SELECT f_name, l_name FROM customers
+    WHERE customer_id IN
+    (# TO REMOVE REPEAT(DUPLICATE) ADD 'DISTINCT' TO SELECT
+    SELECT DISTINCT customer_id FROM transactions
+    WHERE customer_id IS NOT NULL);
+]
+
+-- EXAMPLE 3 --
+IT'S THE REVERS OF EXAMPLE 2
+LET'S FIND THE FIRST AND LAST NAME OF EVERY CUSTOMER, THAT HAS NEVER MADE A TRANSACTION.
+[
+    SELECT f_name, l_name FROM customers
+    WHERE customer_id NOT IN
+    (# TO REMOVE REPEAT(DUPLICATE) ADD 'DISTINCT' TO SELECT
+    SELECT DISTINCT customer_id FROM transactions
+    WHERE customer_id IS NOT NULL);
+]
+
+
+
+<<<||| THE 'GROUP BY CLAUSE' IN SQL |||>>>
+THE 'GROUP BY CLAUSE' WILL AGGREGATE ALL ROWS BY A SPECIFIC COLUME,
+IT'S OFTEN USED WITHY THE AGGREGATE FUNCTIONS. EX: SUM(), MAX(), MIN(), AVG(), COUNT().
+
+-- EXAMPLE 1 --
+LET'S FIND THE AMOUNT OF MONEY WE MAKE PER DAY
+[
+    SELECT SUM(amount), order_date
+    FROM transactions
+    GROUP BY order_date;
+] 
+
+-- EXAMPLE 2 --
+LET'S FIND THE MAX AMOUNT OF MONEY WE MAKE PER DAY
+[
+    SELECT MAX(amount), order_date
+    FROM transactions
+    GROUP BY order_date;
+] 
+
+-- EXAMPLE 3 --
+LET'S FIND THE MIN AMOUNT OF MONEY WE MAKE PER DAY
+[
+    SELECT MIN(amount), order_date
+    FROM transactions
+    GROUP BY order_date;
+] 
+
+-- EXAMPLE 4 --
+LET'S FIND THE AVERAGE ORDER PER DAY
+[
+    SELECT AVG(amount), order_date
+    FROM transactions
+    GROUP BY order_date;
+]
+
+-- EXAMPLE 5 --
+LET'S FIND HOW MANY TRANSACTIONS HAS TAKEN PLACE PER DAY
+[
+    SELECT COUNT(amount), order_date
+    FROM transactions
+    GROUP BY order_date;
+]
+
+-- EXAMPLE 5 --
+LET'S FIND HOW MUCH EACH CUSTOMER HAS SPENT ON TRANSACTIONS
+[
+    SELECT SUM(amount), customer_id
+    FROM transactions
+    GROUP BY customer_id;
+]
+
+-- EXAMPLE 6 --
+LET'S FIND THE MAXIMUM ORDER THAT EACH CUSTOMER HAS PLACED
+[
+    SELECT MAX(amount), customer_id
+    FROM transactions
+    GROUP BY customer_id;
+]
+
+-- EXAMPLE 7 --
+LET'S FIND THE MINIMUM ORDER THAT EACH CUSTOMER HAS PLACED
+[
+    SELECT MIN(amount), customer_id
+    FROM transactions
+    GROUP BY customer_id;
+]
+
+-- EXAMPLE 8 --
+LET'S FIND THE AVERAGE ORDER THAT EACH CUSTOMER HAS PLACED
+[
+    SELECT AVG(amount), customer_id
+    FROM transactions
+    GROUP BY customer_id;
+]
+
+-- EXAMPLE 9 --
+LET'S FIND HOW MANY TIMES EACH CUSTOMER HAS PLACED AN ORDER
+[
+    SELECT COUNT(amount), customer_id
+    FROM transactions
+    GROUP BY customer_id;
+]
+
+INCASE YOU HAVE TO USE THE 'WHERE' CLAUSE,
+TOGETHER WITH THE 'GROUP BY' CLAUSE !! YOU WILL RUN TO ERRO !!
+USE 'HAVING' INSTAND OF USING 'WHERE' THERE WILL BE NO ERRORS.
+[
+    SELECT COUNT(amount), customer_id
+    FROM transactions
+    GROUP BY customer_id
+    # were the customer has made more than one purchase
+    # and customer id is not null
+    HAVING COUNT(amount) > 1 AND customer_id IS NOT NULL;
+]
+
+
+
+<<<||| THE 'ROLLUP CLAUSE' IN SQL |||>>>
+IT'S AN EXTENSION OF THE 'GROUP BY' CLAUSE,
+IT'S PRODUCES ANY ROW, AND SHOWS THE GRAND TOTAL,
+IT'S ALSO KNOWN AS THE: super-aggregate value.
+
+-- EXAMPLE 1 --
+LET'S GROUP EACH TRANSACTION BY THE ORDER DATE, THEN PRODUCE A GRAND TOTAL.
+[
+    SELECT SUM(amount), order_date
+    FROM transactions
+    GROUP BY order_date WITH ROLLUP;
+]
+
+-- EXAMPLE 2 --
+LET'S COUNT TRANSACTION_ID BY THE ORDER DATE, THEN PRODUCE A GRAND TOTAL.
+[
+    SELECT COUNT(transaction_id), order_date
+    FROM transactions
+    GROUP BY order_date WITH ROLLUP;
+]
+
+-- EXAMPLE 2 --
+LET'S FIND THE NUMBER OF ORDERS EACH CUSTOMER HAS MADE. AND PRODUCE GRAND TOTAL
+[
+    SELECT COUNT(transaction_id) AS "# of orders", customer_id
+    FROM transactions
+    GROUP BY customer_id WITH ROLLUP;
+]
+
+-- EXAMPLE 3 --
+AS A BUSINESS HOW MUCH ARE WE SPENDING ON OUR employees PER HOUR.
+LET'S GROUP ALL employees BY THEIR employee_id, THEN DISPLAY A ROLLUP OF THEIR PAY
+[
+    SELECT SUM(pay) AS "hourlyPAY", rowNam
+    FROM employees
+    GROUP BY rowNam WITH ROLLUP;
+]
+
+
+
+<<<||| THE 'ON DELECT CLAUSE' IN SQL |||>>>
+ON DELECT SET NULL = WHEN A FOREIGN KEY IS DELECTED, REPLACE WITH NULL.
+ON DELECT CASCADE = WHEN A FOREIGN KEY IS DELECTED, DELECT ROW.
+
+WHEN YOU TRY TO DELECT OR UPDATE A TABLE THAT HAS FOREIGN KEY,
+SET THE CHECK TO '0' AFTER YOU ARE DONE, THEN SET IT BACK TO '1'
+[SET foreign_key_checks = 0;] ! DO THIS ON A SEPARAT LINE !
+
+WHEN CREATING A NEW TABLE WITH FOREIGN KEY,
+YOU CAN ADD THE 'ON DELECT' STATEMENT BELOW FOREIGN KEY STATEMENT
+[ ON DELECT SET NULL ]
+
+// ON DELECT SET NULL \\
+YOU CAN UPDATE AN EXISTING TABLE TOO
+IF THE CODE BELOW DOES NOT WORK(ERROR), THEN YOU MAY HAVE TO DROP THE FOREIGN KEY FROM THE TABLE FIRST.
+[
+    ALTER TABLE transactions
+    ADD CONSTRAINT fk_customer_id
+    FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
+    ON DELECT SET NULL;
+]
+
+// ON DELECT CASCADE \\
+[
+    ALTER TABLE transactions
+    ADD CONSTRAINT fk_customer_id
+    FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
+    ON DELECT CASCADE;
+]
+
+
+
+<<<||| STORED PROCEDURE IN SQL |||>>>
+A STORED PROCEDURE IS PREPARED SQL CODE, THAT YOU CAN SAVE.
+IT'S GREATER IF THERE IS A QUERY THAT YOU WRITE OFTEN.
+THEY ARE LIKE FUNCTIONS.
+
+ADVANAGE
+-- reduces network traffic
+-- increases performance
+-- secure, admin can grant permission to use
+DISADVANAGE
+-- increases memory usage of every connections
+
+// TO STORE PROCEDURE USING SQL \\
+[
+    # ';' THIS IS CALLED A 'DELIMITER' IT TELLS MySQL WHERE A
+    # QUERY ENDS, SO SINCE WE WILL HAVE TWO OF THESE';' WE WILL
+    # CHANGE THE DELIMITER TO ANOTHER SYMBOL:'$$' THEN SET IT
+    # BACK TO DEFAULT
+
+    DELIMITER $$
+    CREATE PROCEDURE getALL_customers()
+    BEGIN
+        SELECT * FROM customers;
+    END $$
+    DELIMITER ;
+]
+
+// TO USE OR CALL PROCEDURE USING SQL \\
+[ CALL getALL_customers(); ] 
+
+// TO DELECT PROCEDURE USING SQL \\
+[ DROP PROCEDURE getALL_customers; ] 
+
+// LET'S CREATE A STORED PROCEDURE TO GET A CUSTOMER BY THE customer_id \\
+[
+    DELIMITER $$
+    CREATE PROCEDURE find_customerByID(IN user_id INT)
+    BEGIN
+        SELECT * FROM customers
+        WHERE customer_id = user_id;
+    END $$
+    DELIMITER ;
+]
+
+// LET'S CREATE A STORED PROCEDURE TO GET A CUSTOMER BY THEIR FIRST AND LAST NAME \\
+[
+    DELIMITER $$
+    CREATE PROCEDURE find_customerByNaM(IN f_nam VARCHAR(50), IN l_nam VARCHAR(50))
+    BEGIN
+        SELECT * FROM customers
+        WHERE f_name = f_nam AND l_name = l_nam;
+    END $$
+    DELIMITER ;
+]
+
+
+
+<<<||| TRIGGERS IN SQL |||>>>
+WHEN AN EVENT HAPPENS, A TRIGGER DOSE SOMETHING.
+EXAMPLE WHEN WE: (INSERT, UPDATE, DELECT)
+WE CAN USE A TROGGER TO CHECK DATA, HANDLE ERRORS, AUDITING TABLES
+
+// TO CREATE A TRIGGER \\
+ON UPDATE TRIGGER
+[
+    CREATE TRIGGER before_pay_update
+    BEFORE UPDATE ON employees
+    FOR EACH ROW
+    SET NEW.salary = (NEW.pay * 2080);
+]
+
+// TO DISPLAY TRIGGERS \\
+[ SHOW TRIGGERS ]
+
+// ON INSERT TRIGGER \\
+[
+    CREATE TRIGGER before_pay_insert
+    BEFORE INSERT ON employees
+    FOR EACH ROW
+    SET NEW.salary = (NEW.pay * 2080);
+]
+
+// ON DELECT TRIGGER \\
+[
+    CREATE TRIGGER after_salary_del
+    AFTER DELETE ON employees
+    FOR EACH ROW
+    UPDATE expenses
+    SET exp_total = exp_total - OLD.salary
+    WHERE exp_name = "salaries";
+]
+
+// ON AFTER INSERT TRIGGER \\
+[
+    CREATE TRIGGER after_salary_insert
+    AFTER INSERT ON employees
+    FOR EACH ROW
+    UPDATE expenses
+    SET exp_total = exp_total - NEW.salary
+    WHERE exp_name = "salaries";
+]
+
+// ON AFTER UPDATE TRIGGER \\
+[
+    CREATE TRIGGER after_salary_update
+    AFTER UPDATE ON employees
+    FOR EACH ROW
+    UPDATE expenses
+    SET exp_total = exp_total + (NEW.salary - OLD.salary)
+    WHERE exp_name = "salaries";
+]
+
+
+
+
+
+
+
+
